@@ -234,25 +234,42 @@ void listar_cadastro()
     GtkWidget *box1_lista_cadastro = NULL;
     GtkWidget *label_lista_cadastro = NULL;
     //Variaveis da montagem da lista
-    char nome[30];
-    GtkWidget *tree_view;
-    GtkListStore *list_store;
+    char nome[30] = "\0";
+    GtkTreeView *tree_view;
+    GtkListStore *liststore1;
     GtkTreeIter iter;
     GtkTreeViewColumn *coluna;
-
-    list_store = gtk_list_store_new(1, G_TYPE_STRING);
-
-
+    GtkCellRenderer *renderer;
+    //Variaveis de busca de arquivos
     DIR *diretorio;
     struct dirent *lsdiretorio;
     const char ponto[10] = ".cadastro";
 
+
+    //Bloco de construção do glade - todos os objetos sao carregados do arquivo
+    {
     construtor = gtk_builder_new_from_file("lista_cadastro.glade");
 
     if(construtor==NULL)
     {
         printf("ERRO! Nao foi possivel carregar o arquivo lista_cadastro.glade!!\n");
         return;
+    }
+
+    liststore1 = GTK_LIST_STORE(gtk_builder_get_object(construtor, "liststore1"));
+
+    if(liststore1==NULL)
+    {
+        printf("ERRO! Nao foi possivel carregar o arquivo lista_cadastro.glade!!\n");
+    }
+
+    liststore1 = gtk_list_store_new(1, G_TYPE_STRING);
+
+    coluna = GTK_TREE_VIEW_COLUMN(gtk_builder_get_object(construtor, "tree_view_column"));
+
+    if(coluna==NULL)
+    {
+        printf("ERRO! Nao foi possivel carregar o arquivo lista_cadastro.glade!!\n");
     }
 
     janela_lista_cadastro = GTK_WIDGET(gtk_builder_get_object(construtor, "janela_lista_cadastro"));
@@ -279,12 +296,13 @@ void listar_cadastro()
         return;
     }
 
-    tree_view = GTK_WIDGET(gtk_builder_get_object(construtor, "tree_view_lista_cadastro"));
+    tree_view = GTK_TREE_VIEW(gtk_builder_get_object(construtor, "tree_view_lista_cadastro"));
 
     if(tree_view==NULL)
     {
         printf("ERRO! Nao foi possivel criar o widget tree_view!\n");
         return;
+    }
     }
 
     printf("Listando todos os cadastros...\n");
@@ -309,25 +327,35 @@ void listar_cadastro()
                 printf("%s\n", lsdiretorio->d_name);
                 printf("----------------------------------------------------------\n");
 
-                strcpy(nome, lsdiretorio->d_name);
+                //copia o nome do arquivo encontrada para ser repassado depois a lista de visualização
+                strncpy(nome,lsdiretorio->d_name,30);
 
                 //Adiciona os cadastros encontrados na lista de visualizacao
-                gtk_list_store_set(list_store, &iter, NULL, -1, nome, -1);
-
+                gtk_list_store_append(liststore1, &iter);
+                gtk_list_store_set(liststore1, &iter, 0, &nome, -1);
             }
         }
 
-        tree_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(list_store));
+        //bloco de construção da visualização em árvore
+        //define o modelo da arvore de acordo com a lista ligada ja pronta
+        gtk_tree_view_set_model(GTK_TREE_VIEW(tree_view),GTK_TREE_MODEL(liststore1));
 
-        coluna = gtk_tree_view_column_new_with_attributes("Nome do Arquivo", gtk_cell_renderer_text_new(), "text", 0, "background", 1, NULL);
+        //render de texto
+        renderer = gtk_cell_renderer_text_new();
 
-        gtk_tree_view_append_column(GTK_TREE_VIEW(tree_view), coluna);
+        //associa o render de texto com a coluna da visualização
+        gtk_tree_view_column_pack_start(GTK_TREE_VIEW_COLUMN(coluna), renderer, TRUE);
 
-        g_object_unref(list_store);
+        //define os atributos da coluna da visualização
+        gtk_tree_view_column_set_attributes(GTK_TREE_VIEW_COLUMN(coluna), renderer, "text", 0, NULL);
+
+        g_object_unref(liststore1);
 
         closedir(diretorio);
 
         gtk_widget_show_all(janela_lista_cadastro);
+
+        g_object_unref(janela_lista_cadastro);
 
     return;
 }
