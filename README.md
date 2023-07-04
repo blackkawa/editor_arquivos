@@ -6,7 +6,6 @@ Este programa cria arquivos de texto com a extensão ".cadastro" para organizar 
 Funções:
 Criar Cadastros
 Listar Cadastros
-Alterar Cadastros
 
 
 Compilar usando o seguinte comando:
