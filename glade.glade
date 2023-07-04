@@ -42,34 +42,6 @@
             <property name="position">1</property>
           </packing>
         </child>
-        <child>
-          <object class="GtkButton" id="botao_alterar_cadastro">
-            <property name="label" translatable="yes">Alterar Cadastros</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <signal name="activate" handler="alterar_cadastro" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="criar_janela">
-            <property name="label" translatable="yes">Criar Janela</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <signal name="activate" handler="teste" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
       </object>
     </child>
   </object>

@@ -9,7 +9,7 @@
     <property name="has-focus">True</property>
     <property name="can-default">True</property>
     <property name="title" translatable="yes">Lista de Cadastros</property>
-    <property name="default-width">400</property>
+    <property name="default-width">500</property>
     <property name="default-height">400</property>
     <property name="destroy-with-parent">True</property>
     <property name="urgency-hint">True</property>
@@ -40,16 +40,45 @@
             <property name="margin-top">2</property>
             <property name="margin-bottom">2</property>
             <property name="model">liststore1</property>
-            <property name="expander-column">tree_view_column</property>
+            <property name="expander-column">tree_view_column_arquivo</property>
             <property name="enable-grid-lines">vertical</property>
             <property name="enable-tree-lines">True</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>
             </child>
             <child>
-              <object class="GtkTreeViewColumn" id="tree_view_column">
-                <property name="title" translatable="yes">Arquivos</property>
+              <object class="GtkTreeViewColumn" id="tree_view_column_arquivo">
+                <property name="title" translatable="yes">Arquivo</property>
                 <property name="expand">True</property>
+                <property name="sort-column-id">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="tree_view_column_nome">
+                <property name="title" translatable="yes">Nome</property>
+                <property name="expand">True</property>
+                <property name="sort-column-id">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="tree_view_column_idade">
+                <property name="title" translatable="yes">Idade</property>
+                <property name="expand">True</property>
+                <property name="sort-column-id">2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="tree_view_column_telefone">
+                <property name="title" translatable="yes">Telefone</property>
+                <property name="expand">True</property>
+                <property name="sort-column-id">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="tree_view_column_cpf">
+                <property name="title" translatable="yes">CPF</property>
+                <property name="expand">True</property>
+                <property name="sort-column-id">4</property>
               </object>
             </child>
           </object>

@@ -5,7 +5,8 @@
 
 /*
 ESTE PROGRAMA CRIA CADASTROS SIMPLES E OS ARMAZENA EM FORMATO DE ARQUIVOS BINARIOS
-As funções estão documentadas no arquivo manipulador_texto.c
+
+Os arquivos sao em formato .cadastro, e podem ser alterados facilmente com um bloco de notas
 
 Estrutura basica do cadastro:
     int codigo; - código identificador do cadastro, gerado automaticamente
@@ -21,8 +22,27 @@ Estrutura basica do cadastro:
 
 */
 
+/*
+Modelo de um cadastro:
+//----------------------------------------------------------
+Codigo:
+Idade:
+Telefone:
+Nome:
+CPF:
+//----------------------------------------------------------
+*/
+
+/*
+Dados da estrutura raiz, que é um registro de índice de todos os cadastros ja criados
+
+//----------------------------------------------------------
+Numero de Cadastros registrados: 00
+//----------------------------------------------------------
+
+*/
+
 void fechar_janela();
-void listar_cadastro();
 void teste();
 
 int main(int argc, char **argv)
@@ -32,8 +52,6 @@ int main(int argc, char **argv)
     GtkWidget *box1 = NULL;
     GtkWidget *botao_criar_cadastro = NULL;
     GtkWidget *botao_listar_cadastro = NULL;
-    GtkWidget *botao_alterar_cadastro = NULL;
-    GtkWidget *criar_janela = NULL;
 
     gtk_init(&argc, &argv);
 
@@ -70,32 +88,11 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    botao_alterar_cadastro = GTK_WIDGET(gtk_builder_get_object(construtor, "botao_alterar_cadastro"));
-
-    if(botao_alterar_cadastro == NULL)
-    {
-        printf("ERRO! nao foi possivel carregar o Widget botao_alterar_cadastro\n");
-        return 1;
-    }
-
-    criar_janela = GTK_WIDGET(gtk_builder_get_object(construtor, "criar_janela"));
-
-    if(botao_alterar_cadastro == NULL)
-    {
-        printf("ERRO! nao foi possivel carregar o Widget criar_janela\n");
-        return 1;
-    }
-
-
     g_signal_connect(Janela, "destroy", G_CALLBACK(fechar_janela), NULL);
 
     g_signal_connect(botao_criar_cadastro, "clicked", G_CALLBACK(criar_cadastro), NULL);
 
     g_signal_connect(botao_listar_cadastro, "clicked", G_CALLBACK(listar_cadastro), NULL);
-
-    g_signal_connect(botao_alterar_cadastro, "clicked", G_CALLBACK(alterar_cadastro), NULL);
-
-    g_signal_connect(criar_janela, "clicked", G_CALLBACK(teste), NULL);
 
     g_object_unref(construtor);
 
@@ -103,6 +100,7 @@ int main(int argc, char **argv)
 
     gtk_main();
 
+    system("pause");
     return 0;
 }
 

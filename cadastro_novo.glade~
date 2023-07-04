@@ -107,7 +107,6 @@
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="buffer">buffer_nome</property>
-		<property name="max-length">20</property>
                 <property name="input-purpose">name</property>
               </object>
               <packing>
@@ -121,8 +120,7 @@
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="buffer">buffer_idade</property>
-                <property name="max-length">3</property>
-                <property name="input-purpose">digits</property>
+                <property name="input-purpose">number</property>
               </object>
               <packing>
                 <property name="left-attach">1</property>
@@ -135,7 +133,6 @@
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="buffer">buffer_telefone</property>
-                <property name="max-length">13</property>
                 <property name="input-purpose">phone</property>
               </object>
               <packing>
@@ -149,7 +146,6 @@
                 <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="buffer">buffer_cpf</property>
-                <property name="max-length">11</property>
                 <property name="input-purpose">number</property>
               </object>
               <packing>

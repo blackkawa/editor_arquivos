@@ -57,7 +57,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="Criar Janela">
+          <object class="GtkButton" id="criar_janela">
             <property name="label" translatable="yes">Criar Janela</property>
             <property name="visible">True</property>
             <property name="can-focus">True</property>
