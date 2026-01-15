@@ -20,7 +20,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
-            <signal name="activate" handler="criar_cadastro" swapped="no"/>
+            <signal name="clicked" handler="criar_cadastro" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -34,7 +34,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
-            <signal name="activate" handler="listar_cadastro" swapped="no"/>
+            <signal name="clicked" handler="listar_cadastro" swapped="no"/>
           </object>
           <packing>
             <property name="expand">True</property>

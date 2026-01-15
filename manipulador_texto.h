@@ -3,13 +3,16 @@
 
 #include <gtk/gtk.h>
 
+#define tamanho_busca 40
+
+
 typedef struct
 {
     int codigo;
-    int idade;
-    int telefone;
+    char idade[40];
+    char telefone[40];
     char nome[40];
-    int cpf;
+    char cpf[40];
 }dados;
 
 typedef struct
@@ -28,14 +31,14 @@ typedef struct
     char *exibir_telefone;
 }exibir_dados;
 
-void criar_cadastro();
-void listar_cadastro();
-char Encapsulador_Arquivo();
-char Desencapsulador_Arquivo();
-void limpar_buffer_novo_cadastro();
-int criar_numero_cadastro();
-void funcao_criar_cadastro();
-int confirmar_cadastro_novo();
+int criar_numero_cadastro(FILE *arquivo, char *identificador);
+void criar_cadastro(GtkButton *botao, gpointer data);
+void listar_cadastro(GtkButton *botao, gpointer data);
+char Desencapsulador_Arquivo(char arquivo[tamanho_busca]);
+char Encapsulador_Arquivo(char arquivo[tamanho_busca]);
+void limpar_buffer_novo_cadastro(buffer_texto *buffers_texto);
+void funcao_criar_cadastro(buffer_texto *buffers_texto);
+int confirmar_cadastro_novo(buffer_texto *buffers_texto);
 
 
 #endif // MANIPULADOR_TEXTO_H_INCLUDED

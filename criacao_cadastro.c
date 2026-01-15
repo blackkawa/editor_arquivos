@@ -9,7 +9,7 @@
 
 #define tamanho_busca 40
 //Cria cadastros de acordo com a estrutura do cabeçalho, com o usuário inserindo os dados.
-void criar_cadastro()
+void criar_cadastro(GtkButton *botao, gpointer data)
 {
     buffer_texto *buffers_texto;
     buffers_texto = malloc(sizeof(buffer_texto));
@@ -44,6 +44,8 @@ void criar_cadastro()
     buffer_cpf = gtk_entry_buffer_new('\0', 0);
 
     buffer_telefone = gtk_entry_buffer_new('\0', 0);
+	
+	printf("teste!\n");
 
     if(construtor==NULL)
     {
@@ -330,10 +332,6 @@ void funcao_criar_cadastro(buffer_texto *buffers_texto)
     const gchar *buffer_telefone = "\0";
     const gchar *buffer_idade = "\0";
 
-    int idade = 0;
-    int telefone = 0;
-    int cpf = 0;
-
     printf("Adquirindo texto dos buffers...\n");
     printf("Adquirindo texto buffer 3\n");
     buffer_nome = gtk_entry_buffer_get_text(buffers_texto->buffer3);
@@ -344,20 +342,15 @@ void funcao_criar_cadastro(buffer_texto *buffers_texto)
     printf("Adquirindo texto buffer 2\n");
     buffer_idade = gtk_entry_buffer_get_text(buffers_texto->buffer2);
 
-    printf("Convertendo valores dos buffers...\n");
-    cpf = atoi(buffer_cpf);
-    telefone = atoi(buffer_telefone);
-    idade = atoi(buffer_idade);
-
     dados *cadastro = NULL;
     cadastro = malloc(sizeof(dados));
     strcpy(cadastro->nome, "\0");
 
     printf("Repassando valores dos buffers ao cadastro novo...\n");
-    cadastro->cpf = cpf;
-    cadastro->idade = idade;
+	strncpy(cadastro->cpf, buffer_cpf, 40);
+	strncpy(cadastro->idade, buffer_idade,40);	
     strncpy(cadastro->nome, buffer_nome, 40);
-    cadastro->telefone = telefone;
+    strncpy(cadastro->telefone, buffer_telefone,40);
 
     DIR *diretorio;
     FILE *arquivo = NULL;
@@ -370,7 +363,7 @@ void funcao_criar_cadastro(buffer_texto *buffers_texto)
     int status = NORMAL;
     int c = 0;
 
-
+  
     //abre o diretorio aonde ficarao alocados os registros
     if((diretorio = opendir("./Cadastros"))==NULL)
     {
@@ -381,46 +374,16 @@ void funcao_criar_cadastro(buffer_texto *buffers_texto)
     //Checa se os valores inseridos sao validos e os imprime
     printf("----------------------------------------------------------\n");
     printf("Cadastro Inserido: \n");
+	printf("\nNome: %s", cadastro->nome);
+	printf("Idade: %s\n", cadastro->idade);
+	printf("Telefone: %s\n", cadastro->telefone); 
+	printf("CPF: %s\n", cadastro->cpf);
 
     //Verifica se o nome possui apenas numeros
-    if((strcmp(cadastro->nome, "\0")!=0)&&(strcmp(cadastro->nome, "@")>0))
+    if((strcmp(cadastro->nome, "\0")==0)&&(strcmp(cadastro->nome, "@")>0))
     {
         printf("\nNome: %s", cadastro->nome);
-    }else
-        {
-            printf("\nErro! Nome Invalido!\n");
-            status = ERRO;
-        }
-
-    //Verifica se foi inserido um numero valido
-    if(cadastro->idade!=0)
-    {
-        printf("Idade: %i\n", cadastro->idade);
-    }else
-        {
-            printf("Erro! Idade Invalida!\n");
-            status = ERRO;
-        }
-
-    //Verifica se foi inserido um numero valido
-    if(cadastro->telefone!=0)
-    {
-        printf("Telefone: %i\n", cadastro->telefone);
-    }else
-        {
-            printf("Erro! Telefone Invalido!\n");
-            status = ERRO;
-        }
-
-    //Verifica se foi inserido um numero valido
-    if(cadastro->cpf!=0)
-    {
-        printf("CPF: %i\n", cadastro->cpf);
-    }else
-        {
-            printf("Erro! CPF Invalido!\n");
-            status = ERRO;
-        }
+    }
 
     printf("----------------------------------------------------------\n");
     //------------------------------------------------------------
@@ -470,11 +433,11 @@ void funcao_criar_cadastro(buffer_texto *buffers_texto)
         fprintf(arquivo, "%s", "//Nome:");
         fprintf(arquivo, "%s\n", cadastro->nome);
         fprintf(arquivo, "%s", "//Idade:");
-        fprintf(arquivo, "%i\n", cadastro->idade);
+        fprintf(arquivo, "%s\n", cadastro->idade);
         fprintf(arquivo, "%s", "//Telefone:");
-        fprintf(arquivo, "%i\n", cadastro->telefone);
+        fprintf(arquivo, "%s\n", cadastro->telefone);
         fprintf(arquivo, "%s", "//CPF:");
-        fprintf(arquivo, "%i\n", cadastro->cpf);
+        fprintf(arquivo, "%s\n", cadastro->cpf);
         fprintf(arquivo, "%s", "//----------------------------------------------------------\n");
 
         fclose(arquivo);
@@ -685,6 +648,7 @@ int confirmar_cadastro_novo(buffer_texto *buffers_texto)
     g_signal_connect_swapped(botao_corrigir_confirmar_cadastro_novo, "clicked", G_CALLBACK(gtk_window_close), janela_confirmar_cadastro_novo);
 
     g_signal_connect_swapped(botao_confirmar_confirmar_cadastro_novo, "clicked", G_CALLBACK(funcao_criar_cadastro), buffers_texto);
+	g_signal_connect_swapped(botao_confirmar_confirmar_cadastro_novo, "clicked", G_CALLBACK(limpar_buffer_novo_cadastro), buffers_texto);
     g_signal_connect_swapped(botao_confirmar_confirmar_cadastro_novo, "clicked", G_CALLBACK(gtk_window_close), janela_confirmar_cadastro_novo);
 
     g_signal_connect_swapped(janela_confirmar_cadastro_novo, "destroy", G_CALLBACK(gtk_window_close),janela_confirmar_cadastro_novo);
@@ -692,11 +656,6 @@ int confirmar_cadastro_novo(buffer_texto *buffers_texto)
     gtk_widget_show_all(janela_confirmar_cadastro_novo);
 
     g_object_unref(construtor);
-
-    buffer_nome = "\0";
-    buffer_cpf = "\0";
-    buffer_telefone = "\0";
-    buffer_idade = "\0";
 
     return 0;
 }

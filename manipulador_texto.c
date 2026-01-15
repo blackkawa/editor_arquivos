@@ -7,15 +7,15 @@
 #define NORMAL 0
 #define ERRO 1
 
-#define tamanho_busca 40
 
 //Criar solucao para quando nao houver a pasta cadastro e pasta raiz!
 
 //Este bloco lista todos os cadastros
 
 //lista todos os cadastros existentes
-void listar_cadastro()
+void listar_cadastro(GtkButton *botao, gpointer data)
 {
+	
     //Variaveis do construtor GTK
     GtkBuilder *construtor = NULL;
     GtkWidget *janela_lista_cadastro = NULL;
@@ -40,6 +40,8 @@ void listar_cadastro()
     int varredura = 0;
 
     FILE *arquivo = NULL;
+	
+	GError *error = NULL;
 
     char *busca = NULL;
     int analisador_busca = 0;
@@ -50,10 +52,12 @@ void listar_cadastro()
     char comparar_cpf[7] = "//CPF:";
     char comparar_telefone[12] = "//Telefone:";
     char caminho2[tamanho_busca] = "./Cadastros/";
+	 
+	printf("teste!\n");
 
     exibir_dados *dados_exibidos = NULL;
 
-    dados_exibidos = malloc(sizeof(char[tamanho_busca*5]));
+    dados_exibidos = malloc(sizeof(dados_exibidos)*4);
 
     dados_exibidos->exibir_nome = malloc(sizeof(char[tamanho_busca]));
     strcpy(dados_exibidos->exibir_nome, "\0");
@@ -75,7 +79,13 @@ void listar_cadastro()
     printf("Erro tipo: %i, %s \n", errno, strerror(errno));
 
     //Bloco de construção do glade - todos os objetos sao carregados do arquivo
+    
     construtor = gtk_builder_new_from_file("lista_cadastro.glade");
+    if (!construtor) {
+        g_printerr("Erro ao carregar Glade: %s\n", error->message);
+        g_clear_error(&error);
+        return;
+    }
 
     printf("Erro tipo: %i, %s \n", errno, strerror(errno));
 
@@ -87,7 +97,15 @@ void listar_cadastro()
         return;
     }
 
+    janela_lista_cadastro = GTK_WIDGET(gtk_builder_get_object(construtor, "janela_lista_cadastro"));
     liststore1 = GTK_LIST_STORE(gtk_builder_get_object(construtor, "liststore1"));
+    
+    if (!liststore1) {
+        g_printerr("Erro: liststore1 não encontrada no Glade\n");
+        return;
+    }
+    
+    gtk_list_store_clear(liststore1); // Limpa a lista antes de popular
 
     if(liststore1==NULL)
     {
@@ -135,15 +153,6 @@ void listar_cadastro()
     {
         printf("ERRO! Nao foi possivel carregar o arquivo lista_cadastro.glade!!\n");
         printf("Erro tipo: %i, %s \n", errno, strerror(errno));
-    }
-
-    janela_lista_cadastro = GTK_WIDGET(gtk_builder_get_object(construtor, "janela_lista_cadastro"));
-
-    if(janela_lista_cadastro==NULL)
-    {
-        printf("ERRO! Nao foi possivel criar o widget janela_lista_cadastro!\n");
-        printf("Erro tipo: %i, %s \n", errno, strerror(errno));
-        return;
     }
 
     box1_lista_cadastro = GTK_WIDGET(gtk_builder_get_object(construtor, "box1_lista_cadastro"));
@@ -302,13 +311,13 @@ void listar_cadastro()
                                                 printf("Encontrada a linha %s, copiando...\n", busca);
                                                 for(varredura = 0;varredura<=analisador_busca;varredura++)
                                                 {
-                                                    if(varredura+6==15)
+                                                    if(varredura+8==15)
                                                     {
                                                         printf("Final da varredura!\n");
                                                         varredura = 50;
                                                     }else
                                                         {
-                                                            dados_exibidos->exibir_cpf[varredura] = busca[varredura+6];
+                                                            dados_exibidos->exibir_cpf[varredura] = busca[varredura+8];
                                                         }
 
                                                 }
@@ -406,10 +415,6 @@ void listar_cadastro()
         printf("Iniciando a coluna 1...\n");
         //define os atributos da coluna da visualização
         gtk_tree_view_column_set_attributes(GTK_TREE_VIEW_COLUMN(coluna_nome), renderer, "text", 1, NULL);
-
-
-        printf("Liberando memoria da lista ligada...\n");
-        g_object_unref(liststore1);
 
         printf("Encerrando o diretorio...\n");
         closedir(diretorio);
